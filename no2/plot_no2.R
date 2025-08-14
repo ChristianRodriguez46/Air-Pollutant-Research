@@ -5,7 +5,7 @@ library(scales)
 # ───────────────────────────────────────────────────────────────
 # 1.  Annual % days low > high
 # ───────────────────────────────────────────────────────────────
-ann_pct_co <- cowt_daily_complete %>%
+ann_pct_no2 <- no2wt_daily_complete %>%
   mutate(date = as.Date(date),
          year = year(date),
          low_gt_high = low > high) %>% 
@@ -23,7 +23,7 @@ fill_blue <- "#64b5f6"
 # ───────────────────────────────────────────────────────────────
 # 3.  Shading
 # ───────────────────────────────────────────────────────────────
-shade_co <- ann_pct_co %>% 
+shade_no2 <- ann_pct_no2 %>% 
   mutate(start = as.Date(make_date(year, 1, 1)),
          end   = as.Date(make_date(year, 12, 31)),
          alpha = rescale(pct_low_gt_high, to = c(0.05, 0.30)))
@@ -31,7 +31,7 @@ shade_co <- ann_pct_co %>%
 # ───────────────────────────────────────────────────────────────
 # 4.  Ensure proper date formats
 # ───────────────────────────────────────────────────────────────
-cowt_daily_complete <- cowt_daily_complete %>%
+no2wt_daily_complete <- no2wt_daily_complete %>%
   mutate(date = as.Date(date))
 
 # Wildfire acreage
@@ -68,36 +68,36 @@ fire_year <- tribble(
   )
 
 # ───────────────────────────────────────────────────────────────
-# 5.  Plot base with shading and CO series
+# 5.  Plot base with shading and NO2 series
 # ───────────────────────────────────────────────────────────────
-p_co <- ggplot() +
-  geom_rect(data = shade_co,
+p_no2 <- ggplot() +
+  geom_rect(data = shade_no2,
             aes(xmin = start, xmax = end,
                 ymin = -Inf,  ymax =  Inf,
                 alpha = alpha),
             fill = fill_blue) +
   scale_alpha_identity() +
-  geom_line(data = cowt_daily_complete,
+  geom_line(data = no2wt_daily_complete,
             aes(date, low , colour = "Low-income"),  linewidth = .4) +
-  geom_line(data = cowt_daily_complete,
+  geom_line(data = no2wt_daily_complete,
             aes(date, high, colour = "High-income"), linewidth = .4) +
   scale_colour_manual(values = c("Low-income"  = col_low,
                                  "High-income" = col_high),
                       name = NULL) +
-  geom_text(data = ann_pct_co,
+  geom_text(data = ann_pct_no2,
             aes(x = make_date(year, 7, 1),
-                y = max(c(cowt_daily_complete$low,
-                          cowt_daily_complete$high), na.rm = TRUE) * 1.04,
+                y = max(c(no2wt_daily_complete$low,
+                          no2wt_daily_complete$high), na.rm = TRUE) * 1.04,
                 label = sprintf("%.0f%%", pct_low_gt_high)),
             size = 4.2, fontface = "bold", colour = "grey20") +
-  scale_x_date(breaks = make_date(unique(ann_pct_co$year), 1, 1),
+  scale_x_date(breaks = make_date(unique(ann_pct_no2$year), 1, 1),
                date_labels = "%Y",
                expand = expansion(mult = c(0.01, 0.08))) +
   labs(
-    title = "Daily population-weighted CO by income group (California)",
+    title = "Daily population-weighted NO2 by income group (California)",
     subtitle = "Blue shade = % of days low-income > high-income • Numbers show annual % (2000–2023)",
     x = NULL,
-    y = "CO (ppm)",
+    y = "NO2 (ppb)",
     caption = "Counties ≥ 90 % data completeness; population = California DOF"
   ) +
   coord_cartesian(clip = "off") +
@@ -112,7 +112,7 @@ p_co <- ggplot() +
 # ───────────────────────────────────────────────────────────────
 # 6.  Add wildfire overlay
 # ───────────────────────────────────────────────────────────────
-p_co_wf <- p_co + 
+p_no2_wf <- p_no2 + 
   geom_col(data = fire_year,
            aes(x = mid, y = acres_scaled),
            fill = "#ca0020", alpha = .25,
@@ -134,8 +134,8 @@ out_dir <- "plots"
 dir.create(out_dir, showWarnings = FALSE)
 
 ggsave(
-  filename = file.path(out_dir, "co_income_wildfire_2000-2023.pdf"),
-  plot     = p_co_wf,
+  filename = file.path(out_dir, "no2_income_wildfire_2000-2023.pdf"),
+  plot     = p_no2_wf,
   width    = 12, height = 7, units = "in"
 )
 
@@ -149,28 +149,28 @@ limit_plot <- function(plot_obj, x_min, x_max, subtitle) {
     scale_x_date(date_breaks = "1 year", date_labels = "%Y")
 }
 
-p_co_0010 <- limit_plot(
-  p_co_wf,
+p_no2_0010 <- limit_plot(
+  p_no2_wf,
   x_min = as.Date("2000-01-01"),
   x_max = as.Date("2010-12-31"),
   subtitle = "Blue shade = % of days low > high • Wildfire bars • 2000–2010"
 )
 
-p_co_1123 <- limit_plot(
-  p_co_wf,
+p_no2_1123 <- limit_plot(
+  p_no2_wf,
   x_min = as.Date("2011-01-01"),
   x_max = as.Date("2023-12-31"),
   subtitle = "Blue shade = % of days low > high • Wildfire bars • 2011–2023"
 )
 
 ggsave(
-  filename = file.path(out_dir, "co_income_wildfire_2000-2010.pdf"),
-  plot     = p_co_0010,
+  filename = file.path(out_dir, "no2_income_wildfire_2000-2010.pdf"),
+  plot     = p_no2_0010,
   width    = 12, height = 7, units = "in"
 )
 
 ggsave(
-  filename = file.path(out_dir, "co_income_wildfire_2011-2023.pdf"),
-  plot     = p_co_1123,
+  filename = file.path(out_dir, "no2_income_wildfire_2011-2023.pdf"),
+  plot     = p_no2_1123,
   width    = 12, height = 7, units = "in"
 )

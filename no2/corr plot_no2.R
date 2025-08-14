@@ -4,7 +4,7 @@ library(lubridate)
 # ───────────────────────────────────────────────────────────────
 # 1.  Year-wise pair-wise correlations  --------------------------
 # ───────────────────────────────────────────────────────────────
-corr_yearly_co <- cowt_daily_complete %>% 
+corr_yearly_no2 <- no2wt_daily_complete %>% 
   mutate(year = year(date)) %>% 
   group_by(year) %>% 
   summarise(
@@ -18,7 +18,7 @@ corr_yearly_co <- cowt_daily_complete %>%
 # ───────────────────────────────────────────────────────────────
 # 2.  Line plot of r vs year  -----------------------------------
 # ───────────────────────────────────────────────────────────────
-p_lines_co <- ggplot(corr_yearly_co, aes(year, r, colour = pair)) +
+p_lines_no2 <- ggplot(corr_yearly_no2, aes(year, r, colour = pair)) +
   geom_hline(yintercept = 0, colour = "grey60") +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
@@ -30,7 +30,7 @@ p_lines_co <- ggplot(corr_yearly_co, aes(year, r, colour = pair)) +
   scale_x_continuous(breaks = seq(2000, 2023, 2)) +
   scale_y_continuous(limits = c(-1, 1)) +
   labs(
-    title = "Year-wise Pearson correlation of population-weighted CO",
+    title = "Year-wise Pearson correlation of population-weighted NO2",
     subtitle = "California counties • 2000 – 2023",
     x = "Year",
     y = "Pearson r"
@@ -39,12 +39,12 @@ p_lines_co <- ggplot(corr_yearly_co, aes(year, r, colour = pair)) +
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
         legend.position = "top")
 
-print(p_lines_co)
+print(p_lines_no2)
 
 # ───────────────────────────────────────────────────────────────
 # 3.  Save as PDF  ----------------------------------------------
 # ───────────────────────────────────────────────────────────────
-ggsave("co_income_correlations_2000-2023.pdf",
-       plot   = p_lines_co,
+ggsave("no2_income_correlations_2000-2023.pdf",
+       plot   = p_lines_no2,
        width  = 8,
        height = 5)

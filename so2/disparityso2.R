@@ -28,15 +28,15 @@ print(disp_year, n = Inf)        # show all years in console
 # ───────────────────────────────────────────────────────────────
 # 3.  Save to CSV  ----------------------------------------------
 # ───────────────────────────────────────────────────────────────
-write_csv(disp_year, "annual_disparities_low_vs_high_pm25_2000_2023.csv")
+write_csv(disp_year, "annual_disparities_low_vs_high_so2_2000_2023.csv")
 
-cat("✓ CSV written to 'annual_disparities_low_vs_high_pm25_2000_2023.csv'\n")
+cat("✓ CSV written to 'annual_disparities_low_vs_high_so2_2000_2023.csv'\n")
 
 library(ggplot2)
 library(readr)   # if you read disp_year from disk
 
 # If disp_year is already in memory, skip this line
-# disp_year <- read_csv("annual_disparities_low_vs_high_pm25_2000_2023.csv")
+# disp_year <- read_csv("annual_disparities_low_vs_high_so2_2000_2023.csv")
 
 # ───────────────────────────────────────────────────────────────
 # 1.  Absolute disparity plot  (µg/m³) ---------------------------
@@ -73,9 +73,9 @@ print(p_rel)
 # ───────────────────────────────────────────────────────────────
 # 3.  Save each plot as PDF  ------------------------------------
 # ───────────────────────────────────────────────────────────────
-ggsave("pm25_abs_disparity_2000_2023.pdf", plot = p_abs,
+ggsave("so2_abs_disparity_2000_2023.pdf", plot = p_abs,
        width = 7, height = 4.5, units = "in")
 
-ggsave("pm25_rel_disparity_2000_2023.pdf", plot = p_rel,
+ggsave("so2_rel_disparity_2000_2023.pdf", plot = p_rel,
        width = 7, height = 4.5, units = "in")
 
