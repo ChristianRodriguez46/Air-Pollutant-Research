@@ -1,5 +1,5 @@
 # 1. Difference series -------------------------------------------------
-diff_daily_co <- cowt_daily_complete |>
+diff_daily_pm25 <- pm25wt_daily_complete |>
   transmute(
     date,
     diff = low - high
@@ -7,7 +7,7 @@ diff_daily_co <- cowt_daily_complete |>
   mutate(date = as.Date(date))   # fix: ensure date is a Date object
 
 # 2. Plot --------------------------------------------------------------
-p_diff_simple_co <- ggplot(diff_daily_co, aes(date, diff)) +
+p_diff_simple_pm25 <- ggplot(diff_daily_pm25, aes(date, diff)) +
   geom_line(colour = "#08306B", linewidth = 0.4) +
   geom_hline(yintercept = 0, colour = "red", linewidth = 0.8) +
   scale_x_date(
@@ -16,9 +16,9 @@ p_diff_simple_co <- ggplot(diff_daily_co, aes(date, diff)) +
     expand      = expansion(mult = c(0.01, 0.02))
   ) +
   labs(
-    title = "Population-weighted daily CO difference (low - high income)",
+    title = "Population-weighted daily PM2.5 difference (low - high income)",
     x     = NULL,
-    y     = "Delta CO (ppm)"
+    y     = "Delta PM2.5 (µg/m³)"
   ) +
   theme_minimal(base_size = 12) +
   theme(
@@ -32,4 +32,4 @@ p_diff_simple_co <- ggplot(diff_daily_co, aes(date, diff)) +
     plot.margin = margin(20, 36, 6, 6)
   )
 
-print(p_diff_simple_co)
+print(p_diff_simple_pm25)

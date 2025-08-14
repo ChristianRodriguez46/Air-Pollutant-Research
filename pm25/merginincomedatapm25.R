@@ -1,4 +1,4 @@
-co <- read.csv("co_california_2000_2023.csv")
+pm25 <- read.csv("pm25_california_2000_2023.csv")
 
 # ───────────────────────────────────────────────────────────────
 # C.  Read & tidy the MHI file, keep only those good counties
@@ -23,7 +23,7 @@ mhi <- mhi %>%
     TRUE       ~ "high"
   ))
 
-co_strat <- co %>% 
+pm25_strat <- pm25 %>% 
   left_join(mhi %>% select(County, income_grp),
             by = c("county" = "County")) %>% 
   filter(!is.na(income_grp))        # drops only counties lacking MHI data
@@ -57,22 +57,22 @@ pop <- readr::read_csv("Pop_2000_to_2023.csv", show_col_types = FALSE) %>%
     pop  = as.numeric(str_remove_all(pop, ","))
   )
 
-co_wpop <- co_strat %>% 
+pm25_wpop <- pm25_strat %>% 
   mutate(year = lubridate::year(date)) %>% 
   left_join(pop, by = c("county", "year"))
 
-stopifnot(!anyNA(co_wpop$pop))  # should pass now
+stopifnot(!anyNA(pm25_wpop$pop))  # should pass now
 
-cowt_daily <- co_wpop %>% 
+pm25wt_daily <- pm25_wpop %>% 
   group_by(date, income_grp) %>% 
   summarise(
-    co = weighted.mean(co, w = pop, na.rm = TRUE) %>% 
+    pm25 = weighted.mean(pm2_5, w = pop, na.rm = TRUE) %>% 
       replace_na(NA_real_),       # turn NaN → NA
     .groups = "drop"
   ) %>% 
-  pivot_wider(names_from = income_grp, values_from = co) %>% 
+  pivot_wider(names_from = income_grp, values_from = pm25) %>% 
   mutate(disparity = high - low)       # absolute gap; use ratio if preferred
 
-cowt_daily_complete <- cowt_daily %>% 
+pm25wt_daily_complete <- pm25wt_daily %>% 
   filter(!is.na(low) & !is.na(mid) & !is.na(high)) %>%   # keep fully populated days
   mutate(disparity = high - low)                         # recompute just in case

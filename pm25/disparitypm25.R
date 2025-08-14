@@ -4,7 +4,7 @@ library(lubridate)
 # ───────────────────────────────────────────────────────────────
 # 1.  Annual population-weighted means  (low & high) ------------
 # ───────────────────────────────────────────────────────────────
-annual_means <- pwt_daily_complete %>% 
+annual_means <- pm25wt_daily_complete %>% 
   mutate(year = year(date)) %>% 
   group_by(year) %>% 
   summarise(
