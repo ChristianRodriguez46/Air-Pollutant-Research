@@ -4,7 +4,7 @@ library(lubridate)
 # ───────────────────────────────────────────────────────────────
 # 1.  Annual population-weighted means  (low & high) ------------
 # ───────────────────────────────────────────────────────────────
-annual_means <- pwt_daily_complete %>% 
+annual_means <- ozonewt_daily_complete %>% 
   mutate(year = year(date)) %>% 
   group_by(year) %>% 
   summarise(
@@ -28,15 +28,15 @@ print(disp_year, n = Inf)        # show all years in console
 # ───────────────────────────────────────────────────────────────
 # 3.  Save to CSV  ----------------------------------------------
 # ───────────────────────────────────────────────────────────────
-write_csv(disp_year, "annual_disparities_low_vs_high_pm25_2000_2023.csv")
+write_csv(disp_year, "annual_disparities_low_vs_high_ozone_2000_2023.csv")
 
-cat("✓ CSV written to 'annual_disparities_low_vs_high_pm25_2000_2023.csv'\n")
+cat("✓ CSV written to 'annual_disparities_low_vs_high_ozone_2000_2023.csv'\n")
 
 library(ggplot2)
 library(readr)   # if you read disp_year from disk
 
 # If disp_year is already in memory, skip this line
-# disp_year <- read_csv("annual_disparities_low_vs_high_pm25_2000_2023.csv")
+# disp_year <- read_csv("annual_disparities_low_vs_high_ozone_2000_2023.csv")
 
 # ───────────────────────────────────────────────────────────────
 # 1.  Absolute disparity plot  (µg/m³) ---------------------------
@@ -46,7 +46,7 @@ p_abs <- ggplot(disp_year, aes(year, abs_disp)) +
   geom_line(colour = "#d73027", linewidth = 1) +
   geom_point(colour = "#d73027", size = 2) +
   labs(
-    title = "Annual absolute disparity (low – high) in population-weighted PM2.5",
+    title = "Annual absolute disparity (low – high) in population-weighted ozone",
     x = "Year", y = "Absolute disparity (µg/m³)"
   ) +
   theme_minimal(base_size = 13) +
@@ -60,7 +60,7 @@ p_rel <- ggplot(disp_year, aes(year, rel_disp)) +
   geom_line(colour = "#1a9850", linewidth = 1) +
   geom_point(colour = "#1a9850", size = 2) +
   labs(
-    title = "Annual relative disparity (low / high) in population-weighted PM2.5",
+    title = "Annual relative disparity (low / high) in population-weighted ozone",
     x = "Year", y = "Relative disparity (ratio)"
   ) +
   theme_minimal(base_size = 13) +
@@ -73,9 +73,9 @@ print(p_rel)
 # ───────────────────────────────────────────────────────────────
 # 3.  Save each plot as PDF  ------------------------------------
 # ───────────────────────────────────────────────────────────────
-ggsave("pm25_abs_disparity_2000_2023.pdf", plot = p_abs,
+ggsave("ozone_abs_disparity_2000_2023.pdf", plot = p_abs,
        width = 7, height = 4.5, units = "in")
 
-ggsave("pm25_rel_disparity_2000_2023.pdf", plot = p_rel,
+ggsave("ozone_rel_disparity_2000_2023.pdf", plot = p_rel,
        width = 7, height = 4.5, units = "in")
 
