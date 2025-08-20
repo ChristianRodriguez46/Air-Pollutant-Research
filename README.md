@@ -390,7 +390,7 @@
 
 This project requires the following dependencies:
 
-- **Programming Language:** unknown
+- **Programming Language:** R
 
 ### Installation
 
@@ -412,14 +412,24 @@ Build Air-Pollutant-Research from the source and install dependencies:
 
 [R and Rstudio](https://posit.co/download/rstudio-desktop/)
 
-echo 'Download R, then download the Rstudio IDE that best suits your OS'
+- Download R, then download the Rstudio IDE that best suits your OS
 
-<!-- comment out this section for now
 ### Usage
 
-Run the project with:
+Run the project with: Rstudio IDE
 
-echo 'INSERT-RUN-COMMAND-HERE'
+Set working directory to which ever air pollutant inside the project directory under the tab labeled session'
+
+<ol>
+	<li>merge income data</li>
+	<li>lme{pollutant}</li>
+	<li>corr values{pollutant}</li>
+	<li>corr plot</li>
+	<li>diff plot</li>
+	<li>plot{pollutant}</li>
+	<li>disparity{pollutant}</li>
+</ol>
+<!-- comment out this section for now
 
 ### Testing
 
