@@ -1,3 +1,5 @@
+library(tidyverse)
+library(lubridate)
 co <- read.csv("co_california_2000_2023.csv")
 
 # ───────────────────────────────────────────────────────────────
